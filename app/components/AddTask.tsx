@@ -1,8 +1,8 @@
 import React from "react";
-import connect from "@/app/lib/db";
+// import connect from "@/app/lib/db";
 
 const AddTask = () => {
-  connect();
+  // connect();
   return <div>AddTask</div>;
 };
 
