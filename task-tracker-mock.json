@@ -1,0 +1,151 @@
+{
+  "uuid": "f8a922dc-ca3a-4eae-b47b-fd0459cd36b3",
+  "lastMigration": 32,
+  "name": "Task tracker mock",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 9003,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "b40a759f-7722-436d-a543-b40023ca95a8",
+      "type": "http",
+      "documentation": "Base route",
+      "method": "get",
+      "endpoint": "",
+      "responses": [
+        {
+          "uuid": "fdc07158-f12d-4f92-9161-d2b53cab8957",
+          "body": "{\n  msg: 'Hello there'\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "4e669b57-3fad-487d-b7ee-0e9eab5667a6",
+      "type": "http",
+      "documentation": "Gets all the tasks in the database",
+      "method": "get",
+      "endpoint": "tasks",
+      "responses": [
+        {
+          "uuid": "994f87de-733f-4537-a5e8-f57fca0d5fdd",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "wow-header",
+              "value": "true"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "6efc4918-d618-452e-a603-4e43525f8abc",
+      "type": "http",
+      "documentation": "Authenticate with API",
+      "method": "get",
+      "endpoint": "login",
+      "responses": [
+        {
+          "uuid": "9ec2b7a0-8d74-43e8-99e7-369bf6544ccc",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "b40a759f-7722-436d-a543-b40023ca95a8"
+    },
+    {
+      "type": "route",
+      "uuid": "4e669b57-3fad-487d-b7ee-0e9eab5667a6"
+    },
+    {
+      "type": "route",
+      "uuid": "6efc4918-d618-452e-a603-4e43525f8abc"
+    }
+  ],
+  "proxyMode": true,
+  "proxyHost": "https://fakestoreapi.com",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

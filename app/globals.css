@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #000000;
+  --secondary: #222831;
+  --liner-p1: #393e46;
+  --liner-p2: #570a57;
+  --accent: #892cdc;
+}
+
+.section__padding {
+  @apply px-5 pt-5;
+}
+.navbar-links li,
+.navbar-links__mobile li {
+  @apply my-2;
+}
+.navbar-links__mobile {
+  border-bottom-left-radius: 10px;
+}
+.navbar-links__mobile li {
+  @apply w-max hover:text-accent-2;
+}
+.navbar-links li a {
+  @apply border-[1px] border-transparent p-3 rounded-2xl hover:bg-liner;
+  transition: 0.1s all ease-in;
+}
+.btn {
+  @apply border-2 border-transparent bg-accent-1 text-white hover:bg-transparent hover:border-accent-1 hover:text-liner w-max px-7 py-2 rounded-xl;
+  transition: 0.1s all ease-in;
+}
+.btn:disabled {
+  @apply border-2 border-secondary bg-secondary text-liner cursor-not-allowed brightness-[40%];
+}
+.form {
+  @apply flex flex-col gap-4 w-[100%] md:w-[80%];
+}
+.form input {
+  @apply w-[100%] rounded-xl bg-transparent border-[1px] border-accent-1 px-4 py-2 outline-none;
+}
+.summary {
+  @apply flex flex-wrap gap-3 my-5 border-b-[1px] border-secondary pb-5;
+}
+.summary > p {
+  @apply border-[1px] rounded-lg p-1 text-sm md:text-base;
+}
