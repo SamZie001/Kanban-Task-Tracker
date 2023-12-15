@@ -1,20 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskCard from "./TaskCard";
-import { COLUMNS, ITEMS, onDragEnd } from "@/app/lib/kanbanConfig";
+import { createColumns, onDragEnd } from "@/app/lib/kanbanConfig";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { PagePropsI } from "../interfaces";
 
-const Kanban = () => {
-  const [columns, setColumns] = useState(COLUMNS);
+const Kanban = ({ tasks }: PagePropsI) => {
+  const [columns, setColumns] = useState(createColumns(tasks));
+
   return (
     <div className="my-5 grid sm:grid-cols-2 md:grid-cols-4 gap-2">
       <DragDropContext
-        onDragEnd={(result) => {
-          console.log(result);
-          onDragEnd(result, columns, setColumns);
-        }}
+        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
-        {Object.entries(columns).map(([id, column]) => (
+        {Object.entries(columns)?.map(([id, column]) => (
           <div
             key={id}
             className={`border-[1px] border-${column.colorTone} rounded-lg overflow-hidden`}
@@ -30,25 +29,26 @@ const Kanban = () => {
                   <h1 className="font-semibold text-center py-2">
                     {column.name}
                   </h1>
-                  {column.items.map((item, ind) => (
-                    <Draggable
-                      key={item._id}
-                      draggableId={item._id}
-                      index={ind}
-                    >
-                      {(provided, snapshot) => (
-                        <TaskCard
-                          _id={item._id}
-                          title={item.title}
-                          description={item.description}
-                          dueDate={item.dueDate}
-                          provided={provided}
-                          snapshot={snapshot}
-                          colorTone={column.colorTone}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
+                  {column.items &&
+                    column.items.map((item, ind) => (
+                      <Draggable
+                        key={item._id}
+                        draggableId={item._id}
+                        index={ind}
+                      >
+                        {(provided, snapshot) => (
+                          <TaskCard
+                            _id={item._id}
+                            title={item.title}
+                            description={item.description}
+                            dueDate={item.dueDate}
+                            provided={provided}
+                            snapshot={snapshot}
+                            colorTone={column.colorTone}
+                          />
+                        )}
+                      </Draggable>
+                    ))}
                   {provided.placeholder}
                 </div>
               )}

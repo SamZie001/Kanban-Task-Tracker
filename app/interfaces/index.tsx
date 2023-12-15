@@ -7,12 +7,12 @@ export interface UserI {
 }
 
 export interface TasksI {
-  _id: number | string;
+  _id: string;
   title: string;
   description: string;
   dueDate: string;
   status: string;
-  user?: Schema.Types.ObjectId | string;
+  user?: Schema.Types.ObjectId;
 }
 
 export interface CardI extends Partial<TasksI> {
@@ -21,7 +21,7 @@ export interface CardI extends Partial<TasksI> {
   dueDate: TasksI["dueDate"];
   provided?: DraggableProvided;
   snapshot?: DraggableStateSnapshot;
-  colorTone: string;
+  colorTone?: string;
 }
 
 export interface PagePropsI {

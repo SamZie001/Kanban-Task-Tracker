@@ -5,13 +5,14 @@ export async function GET(req: NextRequest) {
   try {
     await connect();
     const { searchParams } = req.nextUrl;
-    const id = searchParams.get("id");
+    const id = searchParams.get("id")
+    let tasks = [];
 
-    const tasks = await Task.find({ user: id });
+    if (id) tasks = await Task.find({ user: id });
     return new Response(JSON.stringify(tasks), { status: 200 });
   } catch (error: any) {
-    console.error("error at /tasks api route");
-    return new Response(JSON.stringify({ message: "Unknown error" }), {
+    console.log("error at /tasks api route");
+    return new Response(JSON.stringify({}), {
       status: 500,
     });
   }

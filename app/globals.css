@@ -41,12 +41,20 @@
 .form textarea {
   @apply w-[100%] rounded-xl bg-transparent border-[1px] border-accent-1 px-4 py-2 outline-none resize-none;
 }
-.form input[type='date']{
-  @apply bg-secondary
+.form input[type="date"] {
+  @apply bg-secondary;
 }
 .summary {
   @apply flex flex-wrap gap-3 my-5 border-b-[1px] border-secondary pb-5;
 }
 .summary > p {
   @apply border-[1px] rounded-lg p-1 text-sm md:text-base;
+}
+.TEXTAREA::-webkit-scrollbar {
+  max-width: 5px; /* Specify your desired scrollbar width */
+  height: 5px; /* Specify your desired scrollbar height (for horizontal scrollbar, adjust width/height) */
+}
+.TEXTAREA::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 3px;
 }
