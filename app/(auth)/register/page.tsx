@@ -1,21 +1,28 @@
 "use client";
 import React, { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ username: null, password: null });
+  const { push } = useRouter();
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    // send request to endpoint
-
-    // get reseult
-
-    // redirect to login
-    console.log(username, password);
+    axios
+      .post("/api/register", { username, password })
+      .then((response) => {
+        alert("Register success 👍");
+        if (response.statusText === "OK") push("/login");
+      })
+      .catch((error) => {
+        let { username, password } = error.response.data;
+        setErrors({ username, password });
+      });
   }
-  
+
   return (
     <div className="h-[100%] w-[100%] text-white flex flex-col gap-2 justify-center items-center">
       <h1 className="text-lg text-accent-2 font-semibold">~ REGISTER ~</h1>
@@ -29,7 +36,7 @@ const page = () => {
             name="username"
             placeholder="Username"
           />
-
+          <p className="text-red-500">{errors?.username}</p>
           <input
             required
             type="password"
@@ -38,7 +45,7 @@ const page = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
+          <p className="text-red-500">{errors.password}</p>
           <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
             Register
           </button>

@@ -1,12 +1,16 @@
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
+import { User } from "../models/Users";
+import { Task } from "../models/Tasks";
 
-// const DB_URI = process.env.DB_URI;
+const DB_URI = process.env.DB_URI;
 
-// export default function connect() {
-//   console.log("connecting", DB_URI);
-//   try {
-//     mongoose.connect(DB_URI).then(() => console.log("DB Connected"));
-//   } catch (error: unknown) {
-//     console.log(error);
-//   }
-// }
+async function connect() {
+  try {
+    await mongoose.connect(DB_URI);
+    console.log("DB Connected");
+  } catch (error) {
+    console.log("DB connection error: ", error);
+  }
+}
+
+export { User, Task, connect };

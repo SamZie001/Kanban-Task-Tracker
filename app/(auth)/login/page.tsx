@@ -2,23 +2,29 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/app/context/userContext";
+import axios from "axios";
 
 const page = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ username: null, password: null });
   const { loginUser } = useUserContext();
-  const router = useRouter();
+  const { push } = useRouter();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    // send request to endpoint
-
-    // get reseult
-
-    // set global user state to user._id
-    loginUser(username);
-    router.push("/tasks");
+    axios
+      .post("/api/login", { username, password })
+      .then((response) => {
+        if (response.statusText === "OK") {
+          loginUser(response.data);
+          push("/tasks");
+        }
+      })
+      .catch((error) => {
+        let { username, password } = error.response.data;
+        setErrors({ username, password });
+      });
   }
 
   return (
@@ -34,7 +40,7 @@ const page = () => {
             name="username"
             placeholder="Username"
           />
-
+          <p className="text-red-500">{errors?.username}</p>
           <input
             required
             type="password"
@@ -43,7 +49,7 @@ const page = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
+          <p className="text-red-500">{errors?.password}</p>
           <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
             Login
           </button>

@@ -24,4 +24,4 @@ taskSchema.pre("save", function (next) {
   next();
 });
 
-export const User = models.users || model("users", taskSchema);
+export const Task = models.tasks || model("tasks", taskSchema);

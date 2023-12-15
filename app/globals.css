@@ -37,8 +37,12 @@
 .form {
   @apply flex flex-col gap-4 w-[100%] md:w-[80%];
 }
-.form input {
-  @apply w-[100%] rounded-xl bg-transparent border-[1px] border-accent-1 px-4 py-2 outline-none;
+.form input,
+.form textarea {
+  @apply w-[100%] rounded-xl bg-transparent border-[1px] border-accent-1 px-4 py-2 outline-none resize-none;
+}
+.form input[type='date']{
+  @apply bg-secondary
 }
 .summary {
   @apply flex flex-wrap gap-3 my-5 border-b-[1px] border-secondary pb-5;

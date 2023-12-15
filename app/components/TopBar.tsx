@@ -6,6 +6,7 @@ import { useUserContext } from "../context/userContext";
 
 const TopBar = ({ searchKey, setSearchKey }: PagePropsI) => {
   const { user } = useUserContext();
+  const parsedUser = JSON.parse(user);
 
   function isLetter(char: string) {
     const charCode = char.charCodeAt(0);
@@ -35,7 +36,10 @@ const TopBar = ({ searchKey, setSearchKey }: PagePropsI) => {
           <MdAdd fontSize={30} />
         </Link>
         <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
-          {user && (isLetter(user[0]) ? user[0].toUpperCase() : "👀")}
+          {parsedUser &&
+            (isLetter(parsedUser.username[0])
+              ? parsedUser.username[0].toUpperCase()
+              : "👀")}
         </div>
       </div>
     </div>

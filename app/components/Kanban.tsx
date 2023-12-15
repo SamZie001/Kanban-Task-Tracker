@@ -16,6 +16,7 @@ const Kanban = () => {
       >
         {Object.entries(columns).map(([id, column]) => (
           <div
+            key={id}
             className={`border-[1px] border-${column.colorTone} rounded-lg overflow-hidden`}
           >
             <Droppable droppableId={id}>
