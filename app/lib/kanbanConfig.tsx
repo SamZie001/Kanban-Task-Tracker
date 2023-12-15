@@ -1,4 +1,5 @@
 import { TasksI } from "../interfaces";
+import { handleEditTask } from "../actions";
 
 export const createColumns = (tasks: TasksI[] | [] | undefined) => {
   return {
@@ -30,6 +31,11 @@ export const onDragEnd = (result: any, columns: any, setColumns: any) => {
   const { source, destination } = result;
 
   if (source.droppableId !== destination.droppableId) {
+    handleEditTask({
+      _id: result.draggableId,
+      status: result.destination.droppableId,
+    });
+
     const sourceColumn = columns[source.droppableId];
     const destColumn = columns[destination.droppableId];
 

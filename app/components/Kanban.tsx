@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TaskCard from "./TaskCard";
 import { createColumns, onDragEnd } from "@/app/lib/kanbanConfig";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -9,7 +9,7 @@ const Kanban = ({ tasks }: PagePropsI) => {
   const [columns, setColumns] = useState(createColumns(tasks));
 
   return (
-    <div className="my-5 grid sm:grid-cols-2 md:grid-cols-4 gap-2">
+    <div className="py-5 grid sm:grid-cols-2 md:grid-cols-4 gap-2">
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >

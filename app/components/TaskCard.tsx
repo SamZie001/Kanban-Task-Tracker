@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { CardI } from "../interfaces";
 import { MdEdit, MdCheck } from "react-icons/md";
+import { handleEditTask } from "../actions";
 
 const TaskCard = ({
+  _id,
   title,
   description,
   dueDate,
@@ -15,13 +17,10 @@ const TaskCard = ({
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDesc, setUpdatedDesc] = useState(description);
 
-  const handleTaskEdit = () => {
-    setEditMode(false);
-  };
-
   return (
     <form
-      className={`w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-liner flex flex-col p-2 select-none ${
+      action={handleEditTask}
+      className={`w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
         snapshot?.isDragging && `border-[2px] border-${colorTone} bg-secondary`
       }`}
       ref={provided?.innerRef}
@@ -31,19 +30,16 @@ const TaskCard = ({
     >
       <div className="flex justify-end">
         {!editMode && (
-          <button
+          <div
             onClick={() => setEditMode(true)}
-            className={`text-sm flex gap-2 items-center bg-${colorTone} p-1 rounded-md`}
+            className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
           >
             <p>Edit</p>
             <MdEdit />
-          </button>
+          </div>
         )}
         {editMode && (
-          <button
-            onClick={() => handleTaskEdit()}
-            className={`text-sm flex gap-2 items-center bg-green-600 p-1 rounded-md`}
-          >
+          <button className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md">
             <p>Confirm</p>
             <MdCheck />
           </button>
@@ -51,16 +47,19 @@ const TaskCard = ({
       </div>
 
       <div className="h-[100%]">
+        <input type="text" name="taskId" value={_id} hidden />
         <input
           className={`font-semibold bg-transparent outline-none ${
             editMode && `border-b-[1px] border-dotted border-${colorTone}`
           }`}
           type="text"
+          name="title"
           value={updatedTitle}
           disabled={!editMode}
           onChange={(e) => setUpdatedTitle(e.target.value)}
         />
         <textarea
+          name="description"
           value={updatedDesc}
           disabled={!editMode}
           onChange={(e) => setUpdatedDesc(e.target.value)}

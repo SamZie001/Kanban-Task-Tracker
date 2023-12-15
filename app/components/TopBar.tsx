@@ -1,10 +1,9 @@
 import React from "react";
 import { PagePropsI } from "../interfaces";
-import Link from "next/link";
 import { MdAdd } from "react-icons/md";
 import { useUserContext } from "../context/userContext";
 
-const TopBar = ({ searchKey, setSearchKey }: PagePropsI) => {
+const TopBar = ({ searchKey, setSearchKey, setShowAddForm }: PagePropsI) => {
   const { user } = useUserContext();
   const parsedUser = JSON.parse(user);
 
@@ -29,12 +28,15 @@ const TopBar = ({ searchKey, setSearchKey }: PagePropsI) => {
       </div>
 
       <div className="flex flex-row-reverse md:flex-row justify-between w-[100%] md:w-max gap-5">
-        <Link
-          href="/tasks/new-task"
-          className="grid place-content-center w-10 h-10 bg-accent-1 border-[1px] border-accent-1 rounded-lg hover:bg-transparent hover:text-liner"
+        <div
+          onClick={() => {
+            // @ts-ignore
+            setShowAddForm(true);
+          }}
+          className="cursor-pointer grid place-content-center w-10 h-10 bg-accent-1 border-[1px] border-accent-1 rounded-lg hover:bg-transparent hover:text-liner"
         >
           <MdAdd fontSize={30} />
-        </Link>
+        </div>
         <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
           {parsedUser &&
             (isLetter(parsedUser.username[0])

@@ -16,6 +16,7 @@ export interface TasksI {
 }
 
 export interface CardI extends Partial<TasksI> {
+  _id: TasksI["_id"];
   title: TasksI["title"];
   description: TasksI["description"];
   dueDate: TasksI["dueDate"];
@@ -29,4 +30,5 @@ export interface PagePropsI {
   setTasks?: React.Dispatch<React.SetStateAction<[] | TasksI[]>>;
   searchKey?: string;
   setSearchKey?: React.Dispatch<React.SetStateAction<string>>;
+  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
 }
