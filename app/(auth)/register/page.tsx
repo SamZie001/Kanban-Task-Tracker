@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const page = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: null, password: null });
@@ -11,15 +12,18 @@ const page = () => {
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     axios
       .post("/api/register", { username, password })
       .then((response) => {
         alert("Register success 👍");
+        setIsLoading(false);
         if (response.statusText === "OK") push("/login");
       })
       .catch((error) => {
         let { username, password } = error.response.data;
         setErrors({ username, password });
+        setIsLoading(false);
       });
   }
 
@@ -46,8 +50,11 @@ const page = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <p className="text-red-500">{errors.password}</p>
-          <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
-            Register
+          <button
+            disabled={isLoading}
+            className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white"
+          >
+            {isLoading ? "Hold on..." : "Register"}
           </button>
         </form>
       </div>

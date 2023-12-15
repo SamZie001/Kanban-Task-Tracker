@@ -26,6 +26,7 @@ export interface CardI extends Partial<TasksI> {
 }
 
 export interface PagePropsI {
+  user?: string;
   tasks?: TasksI[] | [];
   setTasks?: React.Dispatch<React.SetStateAction<[] | TasksI[]>>;
   searchKey?: string;

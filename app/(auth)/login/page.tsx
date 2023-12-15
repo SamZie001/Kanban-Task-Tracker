@@ -5,6 +5,7 @@ import { useUserContext } from "@/app/context/userContext";
 import axios from "axios";
 
 const page = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: null, password: null });
@@ -13,17 +14,20 @@ const page = () => {
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     axios
       .post("/api/login", { username, password })
       .then((response) => {
         if (response.statusText === "OK") {
           loginUser(response.data);
-          push("/tasks");
+          setIsLoading(false);
+          push("/");
         }
       })
       .catch((error) => {
         let { username, password } = error.response.data;
         setErrors({ username, password });
+        setIsLoading(false);
       });
   }
 
@@ -50,8 +54,11 @@ const page = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <p className="text-red-500">{errors?.password}</p>
-          <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
-            Login
+          <button
+            disabled={isLoading}
+            className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white"
+          >
+            {isLoading ? "Hold on..." : "Login"}
           </button>
         </form>
       </div>

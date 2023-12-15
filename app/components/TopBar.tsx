@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { PagePropsI } from "../interfaces";
 import {
@@ -7,12 +6,8 @@ import {
   MdArrowDownward,
   MdDateRange,
 } from "react-icons/md";
-import { useUserContext } from "../context/userContext";
 
-const TopBar = ({ setTasks, setShowAddForm, setSearchKey }: PagePropsI) => {
-  const { user } = useUserContext();
-  const parsedUser = JSON.parse(user);
-
+const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
   function isLetter(char: string) {
     const charCode = char.charCodeAt(0);
     return (
@@ -51,9 +46,9 @@ const TopBar = ({ setTasks, setShowAddForm, setSearchKey }: PagePropsI) => {
         </div>
 
         <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
-          {parsedUser &&
-            (isLetter(parsedUser.username[0])
-              ? parsedUser.username[0].toUpperCase()
+          {typeof user === "string" &&
+            (isLetter(JSON.parse(user).username[0])
+              ? JSON.parse(user).username[0].toUpperCase()
               : "👀")}
         </div>
       </div>
