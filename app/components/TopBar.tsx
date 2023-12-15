@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { PagePropsI } from "../interfaces";
 import {
   MdAdd,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import { useUserContext } from "../context/userContext";
 
-const TopBar = ({ tasks, setTasks, setShowAddForm }: PagePropsI) => {
+const TopBar = ({ setTasks, setShowAddForm, setSearchKey }: PagePropsI) => {
   const { user } = useUserContext();
   const parsedUser = JSON.parse(user);
 
@@ -19,28 +19,15 @@ const TopBar = ({ tasks, setTasks, setShowAddForm }: PagePropsI) => {
       (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)
     );
   }
-
-  function filterBySearch(e: React.ChangeEvent<HTMLInputElement>) {
-    //   setTasks(prev=>
-    //     {prev.filter((task) => {
-    //       return (
-    //         task.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-    //         task.description
-    //           .toLowerCase()
-    //           .includes(e.target.value.toLowerCase())
-    //       );
-    //     })})
-    // }
-  }
-
   return (
     <div className="text-white flex flex-col-reverse md:flex-row justify-between items-center gap-5">
       <div className="border-[1px] border-secondary w-[100%] md:w-[80%] rounded-lg flex justify-between overflow-hidden">
         <input
-          className="bg-transparent px-4 py-2 outline-none"
+          className="bg-transparent px-4 py-2 outline-none w-[100%]"
           type="text"
           placeholder="Find a Task"
-          onChange={(e) => filterBySearch(e)}
+          // @ts-ignore
+          onChange={(e) => setSearchKey(e.target.value)}
         />
       </div>
 

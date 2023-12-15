@@ -31,6 +31,4 @@ export interface PagePropsI {
   searchKey?: string;
   setSearchKey?: React.Dispatch<React.SetStateAction<string>>;
   setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
-  sortUp?: () => void;
-  sortDown?: () => void;
 }
