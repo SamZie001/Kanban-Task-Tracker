@@ -1,19 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { TasksI } from "../interfaces";
-import {
-  TopBar,
-  Kanban,
-  TaskSummary,
-  FilteredTasks,
-  AddTask,
-} from "@/app/components";
+import { TopBar, Kanban, TaskSummary, AddTask } from "@/app/components";
 import { useUserContext } from "../context/userContext";
 
 const page = () => {
-  const [tasks, setTasks] = useState<TasksI[] | [] | null>(null);
+  const [tasks, setTasks] = useState<TasksI[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchKey, setSearchKey] = useState<string>("");
   const [showAddForm, setShowAddForm] = useState(false);
   const { user } = useUserContext();
   const userId = JSON.parse(user)?._id;
@@ -36,21 +29,19 @@ const page = () => {
 
   return (
     <div className="text-white section__padding">
-      <TopBar
-        searchKey={searchKey}
-        setSearchKey={setSearchKey}
-        setShowAddForm={setShowAddForm}
-      />
-      {showAddForm && (
-        <AddTask userId={userId} setShowAddForm={setShowAddForm} />
-      )}
       {!isLoading && tasks && (
         <>
+          <TopBar
+            tasks={tasks}
+            setTasks={setTasks}
+            setShowAddForm={setShowAddForm}
+          />
+          {showAddForm && (
+            <AddTask userId={userId} setShowAddForm={setShowAddForm} />
+          )}
+
           <TaskSummary tasks={tasks} />
-          {searchKey.length ? (
-            <FilteredTasks tasks={tasks} searchKey={searchKey} />
-          ) : undefined}
-          {!searchKey.length ? <Kanban tasks={tasks} /> : undefined}
+          <Kanban tasks={tasks} />
         </>
       )}
     </div>

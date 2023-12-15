@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import format from "date-fns/format";
 import { CardI } from "../interfaces";
-import { MdEdit, MdCheck } from "react-icons/md";
+import { MdEdit, MdCheck, MdTimer } from "react-icons/md";
 import { handleEditTask } from "../actions";
 
 const TaskCard = ({
@@ -39,7 +40,10 @@ const TaskCard = ({
           </div>
         )}
         {editMode && (
-          <button className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md">
+          <button
+            onClick={() => setEditMode(false)}
+            className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
+          >
             <p>Confirm</p>
             <MdCheck />
           </button>
@@ -70,9 +74,12 @@ const TaskCard = ({
       </div>
 
       <p
-        className={`text-[0.5rem] self-end pb-1 border-b-[2px] w-max border-${colorTone}`}
+        className={`flex gap-1 items-center text-[0.5rem] self-end pb-1 border-b-[2px] w-max border-${colorTone}`}
       >
-        Due: &nbsp;{dueDate}
+        <span>
+          <MdTimer />
+        </span>
+        <span>{format(new Date(dueDate), "dd MMM yyyy")}</span>
       </p>
     </form>
   );
