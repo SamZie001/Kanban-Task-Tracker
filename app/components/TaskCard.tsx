@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import format from "date-fns/format";
 import { CardI } from "../interfaces";
-import { MdEdit, MdCheck, MdTimer } from "react-icons/md";
+import { MdEdit, MdCheck, MdTimer, MdDragIndicator } from "react-icons/md";
 import { handleEditTask } from "../actions";
 
 const TaskCard = ({
@@ -26,10 +26,15 @@ const TaskCard = ({
       }`}
       ref={provided?.innerRef}
       {...provided?.draggableProps}
-      {...provided?.dragHandleProps}
       style={provided?.draggableProps.style}
     >
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <div
+          {...provided?.dragHandleProps}
+          className="hover:bg-liner rounded-full w-[22px] h-[22px] text-base p-2 grid place-content-center"
+        >
+          <MdDragIndicator />
+        </div>
         {!editMode && (
           <div
             onClick={() => setEditMode(true)}
