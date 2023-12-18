@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import format from "date-fns/format";
 import { CardI } from "../lib/interfaces";
 import {
@@ -9,8 +9,13 @@ import {
   MdDragIndicator,
   MdDelete,
 } from "react-icons/md";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { handleEditTask, axiosMutateTask } from "@/app/lib/mutateActions";
+import { usePatchTask, useDeleteTask } from "@/app/lib/useTaskData";
+
+const Spinner = () => {
+  return (
+    <div className="inline-block h-3 w-3 rounded-full border-2 border-r-transparent border-l-transparent animate-spin border-t-accent-1 border-b-accent-2" />
+  );
+};
 
 const TaskCard = ({
   _id,
@@ -24,24 +29,23 @@ const TaskCard = ({
   const [editMode, setEditMode] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDesc, setUpdatedDesc] = useState(description);
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending, error } = useMutation({
-    mutationFn: () => axiosMutateTask(_id, "DELETE", {}),
-    onSuccess: () => {
-      alert("Task deleted 👍🏾");
-      queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-        refetchType: "all",
-      });
+  const { mutate: editTask, isPending: isPendingEdit } = usePatchTask(
+    _id,
+    {
+      title: updatedTitle,
+      description: updatedDesc,
     },
-    onError: () => console.log("There was an error getting your tasks!"),
-  });
+    "textEdit"
+  );
+  const {
+    mutate: deleteTask,
+    isPending: isPendingDelete,
+    isSuccess: isDeleteSuccess,
+  } = useDeleteTask(_id);
 
   return (
-    <form
-      action={handleEditTask}
-      className={`w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
+    <div
+      className={`${isDeleteSuccess && 'hidden'} w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
         snapshot?.isDragging && `border-[2px] border-${colorTone} bg-secondary`
       }`}
       ref={provided?.innerRef}
@@ -57,10 +61,12 @@ const TaskCard = ({
         </div>
         <div className="flex items-center gap-2">
           <div
-            onClick={() => mutate()}
+            onClick={() => {
+              deleteTask();
+            }}
             className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner hover:text-red-400/95"
           >
-            <MdDelete />
+            {isPendingDelete ? <Spinner /> : <MdDelete />}
           </div>
           {!editMode && (
             <div
@@ -72,10 +78,13 @@ const TaskCard = ({
           )}
           {editMode && (
             <button
-              onClick={() => setEditMode(false)}
+              onClick={() => {
+                editTask();
+                setEditMode(false);
+              }}
               className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
             >
-              <MdCheck />
+              {isPendingEdit ? <Spinner /> : <MdCheck />}
             </button>
           )}
         </div>
@@ -112,7 +121,7 @@ const TaskCard = ({
         </span>
         <span>{format(new Date(dueDate), "dd MMM yyyy")}</span>
       </p>
-    </form>
+    </div>
   );
 };
 

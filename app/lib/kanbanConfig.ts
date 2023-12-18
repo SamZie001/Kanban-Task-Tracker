@@ -1,5 +1,4 @@
 import { TasksI } from "./interfaces";
-import { handleEditTask } from "@/app/lib/mutateActions";
 
 export const createColumns = (tasks: TasksI[] | [] | undefined) => {
   return {
@@ -26,16 +25,11 @@ export const createColumns = (tasks: TasksI[] | [] | undefined) => {
   };
 };
 
-export const onDragEnd = (result: any, columns: any, setColumns: any) => {
+export const HandleDragEnd = (result: any, columns: any, setColumns: any) => {
   if (!result.destination) return;
   const { source, destination } = result;
 
   if (source.droppableId !== destination.droppableId) {
-    handleEditTask({
-      _id: result.draggableId,
-      status: result.destination.droppableId,
-    });
-
     const sourceColumn = columns[source.droppableId];
     const destColumn = columns[destination.droppableId];
 

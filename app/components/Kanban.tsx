@@ -1,12 +1,22 @@
 "use client";
 import React, { useState } from "react";
 import TaskCard from "./TaskCard";
-import { createColumns, onDragEnd } from "@/app/lib/kanbanConfig";
+import { createColumns, HandleDragEnd } from "@/app/lib/kanbanConfig";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { usePatchTask } from "@/app/lib/useTaskData";
 import { PagePropsI } from "../lib/interfaces";
 
 const Kanban = ({ tasks }: PagePropsI) => {
   const [columns, setColumns] = useState(createColumns(tasks));
+  const [mutateData, setMutateData] = useState({ id: "", status: "" });
+
+  const { mutate } = usePatchTask(
+    mutateData.id,
+    {
+      status: mutateData.status,
+    },
+    "dragEdit"
+  );
 
   return (
     <>
@@ -15,7 +25,15 @@ const Kanban = ({ tasks }: PagePropsI) => {
       </p>
       <div className="py-5 grid sm:grid-cols-2 md:grid-cols-4 gap-2">
         <DragDropContext
-          onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+          onDragEnd={(result) => {
+            const dropId = result.destination?.droppableId;
+            setMutateData({
+              id: result.draggableId,
+              status: dropId ? dropId : result.source.droppableId,
+            });
+            HandleDragEnd(result, columns, setColumns);
+            mutate();
+          }}
         >
           {Object.entries(columns)?.map(([id, column]) => (
             <div

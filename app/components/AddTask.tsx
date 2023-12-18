@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { ActivitySpinner } from ".";
 import { useAddTask } from "../lib/useTaskData";
@@ -17,7 +17,11 @@ const AddTask = ({
     description: "",
     dueDate: "",
   });
-  const { mutate, error, isPending } = useAddTask(formData);
+  const { mutate, error, isPending, isSuccess } = useAddTask(formData);
+
+  useEffect(() => {
+    setShowAddForm(!isSuccess);
+  }, [isSuccess]);
 
   return (
     <div className="fixed top-0 left-0 z-20 bg-black h-[100vh] w-[100vw] text-white flex flex-col gap-2 justify-center items-center px-7">

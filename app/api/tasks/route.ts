@@ -30,53 +30,44 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// export async function PATCH(req: NextRequest) {
-//   // let updateData = {
-//   //   _id: null,
-//   //   title: null,
-//   //   description: null,
-//   //   status: null,
-//   // } as updateDataType;
+export async function PATCH(req: NextRequest) {
+  try {
+    const { searchParams } = req.nextUrl;
+    const _id = searchParams.get("id");
+    const { data, type } = await req.json();
 
-//   // if (data instanceof FormData) {
-//   //   updateData._id = data.get("taskId");
-//   //   updateData.title = data.get("title");
-//   //   updateData.description = data.get("description");
-//   // } else {
-//   //   updateData._id = data._id;
-//   //   updateData.status = data.status;
-//   // }
+    console.log({ data, type });
 
-//   try {
-//     await connect();
-//     const { searchParams } = req.nextUrl;
-//     const id = searchParams.get("id");
-//     const body
+    if (type === "textEdit") {
+      await Task.findOneAndUpdate(
+        { _id },
+        {
+          $set: {
+            title: data.title,
+            description: data.description,
+          },
+        }
+      );
+    }
+    if (type === "dragEdit") {
+      await Task.findOneAndUpdate(
+        { _id },
+        {
+          $set: {
+            status: data.status,
+          },
+        }
+      );
+    }
 
-//     if (updateData.status)
-//       await Task.findOneAndUpdate(
-//         { _id: updateData._id },
-//         { $set: { status: updateData.status } }
-//       );
-//     else
-//       await Task.findOneAndUpdate(
-//         { _id: updateData._id },
-//         {
-//           $set: {
-//             title: updateData.title,
-//             description: updateData.description,
-//           },
-//         }
-//       );
-
-//     return new Response(JSON.stringify({}), { status: 200 });
-//   } catch (error: any) {
-//     console.log("error at /tasks api -post route");
-//     return new Response(JSON.stringify({}), {
-//       status: 500,
-//     });
-//   }
-// }
+    return new Response(JSON.stringify({}), { status: 200 });
+  } catch (error: any) {
+    console.log("error at /tasks api -post route");
+    return new Response(JSON.stringify({}), {
+      status: 500,
+    });
+  }
+}
 
 export async function DELETE(req: NextRequest) {
   try {
