@@ -1,3 +1,4 @@
+import React from "react";
 import { Schema } from "mongoose";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 
@@ -26,7 +27,7 @@ export interface CardI extends Partial<TasksI> {
 }
 
 export interface PagePropsI {
-  user?: string;
+  user?: UserI;
   tasks?: TasksI[] | [];
   setTasks?: React.Dispatch<React.SetStateAction<[] | TasksI[]>>;
   searchKey?: string;

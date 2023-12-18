@@ -1,5 +1,5 @@
-import { TasksI } from "../interfaces";
-import { handleEditTask } from "../actions";
+import { TasksI } from "./interfaces";
+import { handleEditTask } from "@/app/lib/mutateActions";
 
 export const createColumns = (tasks: TasksI[] | [] | undefined) => {
   return {

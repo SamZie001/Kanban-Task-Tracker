@@ -1,13 +1,14 @@
 "use server";
-import { connect } from "./lib/db";
+import { connect } from "./db";
 import { Task } from "@/app/models/Tasks";
 import { revalidatePath, revalidateTag } from "next/cache";
+import axios from "axios";
 
 type updateDataType = {
-  _id: null | string | FormDataEntryValue;
-  title: null | string | FormDataEntryValue;
-  description: null | string | FormDataEntryValue;
-  status: null | string | FormDataEntryValue;
+  _id: null | FormDataEntryValue;
+  title: null | FormDataEntryValue;
+  description: null | FormDataEntryValue;
+  status: null | FormDataEntryValue;
 };
 
 export async function handleEditTask(data: any) {
@@ -51,19 +52,5 @@ export async function handleEditTask(data: any) {
     console.error(error);
   }
 }
-
-export async function handleNewTask(formData: FormData) {
-  const title = formData.get("title");
-  const description = formData.get("description");
-  const dueDate = formData.get("dueDate");
-  const userId = formData.get("userId");
-
-  try {
-    await connect();
-    await Task.create({ title, description, dueDate, user: userId });
-    revalidatePath("/tasks");
-    revalidateTag("tasks");
-  } catch (error: any) {
-    console.error(error);
-  }
-}
+export const axiosMutateTask = async (id: string, method: string, data: {}) =>
+  await axios({ method, url: `/api/tasks?id=${id}`, data });

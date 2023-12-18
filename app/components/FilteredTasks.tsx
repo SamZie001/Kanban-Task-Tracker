@@ -1,5 +1,5 @@
 import React from "react";
-import { PagePropsI, TasksI } from "../interfaces";
+import { PagePropsI, TasksI } from "../lib/interfaces";
 import { TaskCard } from ".";
 
 enum StatusType {

@@ -1,9 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import format from "date-fns/format";
-import { CardI } from "../interfaces";
-import { MdEdit, MdCheck, MdTimer, MdDragIndicator } from "react-icons/md";
-import { handleEditTask } from "../actions";
+import { CardI } from "../lib/interfaces";
+import {
+  MdEdit,
+  MdCheck,
+  MdTimer,
+  MdDragIndicator,
+  MdDelete,
+} from "react-icons/md";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { handleEditTask, axiosMutateTask } from "@/app/lib/mutateActions";
 
 const TaskCard = ({
   _id,
@@ -17,6 +24,19 @@ const TaskCard = ({
   const [editMode, setEditMode] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDesc, setUpdatedDesc] = useState(description);
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: () => axiosMutateTask(_id, "DELETE", {}),
+    onSuccess: () => {
+      alert("Task deleted 👍🏾");
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        refetchType: "all",
+      });
+    },
+    onError: () => console.log("There was an error getting your tasks!"),
+  });
 
   return (
     <form
@@ -35,24 +55,30 @@ const TaskCard = ({
         >
           <MdDragIndicator />
         </div>
-        {!editMode && (
+        <div className="flex items-center gap-2">
           <div
-            onClick={() => setEditMode(true)}
-            className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
+            onClick={() => mutate()}
+            className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner hover:text-red-400/95"
           >
-            <p>Edit</p>
-            <MdEdit />
+            <MdDelete />
           </div>
-        )}
-        {editMode && (
-          <button
-            onClick={() => setEditMode(false)}
-            className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
-          >
-            <p>Confirm</p>
-            <MdCheck />
-          </button>
-        )}
+          {!editMode && (
+            <div
+              onClick={() => setEditMode(true)}
+              className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner"
+            >
+              <MdEdit />
+            </div>
+          )}
+          {editMode && (
+            <button
+              onClick={() => setEditMode(false)}
+              className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
+            >
+              <MdCheck />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="h-[100%]">

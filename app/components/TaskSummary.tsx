@@ -1,5 +1,5 @@
 import React from "react";
-import { PagePropsI } from "../interfaces";
+import { PagePropsI } from "../lib/interfaces";
 
 const TaskSummary = ({ tasks }: PagePropsI) => {
   return (

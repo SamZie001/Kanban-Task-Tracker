@@ -1,74 +1,57 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { TasksI } from "../interfaces";
+import React, { useState } from "react";
+import { useUserContext } from "../context/userContext";
 import {
   TopBar,
   Kanban,
   TaskSummary,
   AddTask,
   FilteredTasks,
+  ActivitySpinner,
 } from "@/app/components";
-import { useUserContext } from "../context/userContext";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useFetchTasks } from "@/app/lib/useTaskData";
 
 const page = () => {
-  const router = useRouter();
-  const [tasks, setTasks] = useState<TasksI[] | []>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const { user } = useUserContext();
+  const { data, isPending, error, isSuccess } = useFetchTasks();
 
-  useEffect(() => {
-    if (typeof user === "string") {
-      const userId = JSON.parse(user)?._id;
-      setIsLoading(true);
-      fetch(`/api/tasks?id=${userId}`, {
-        next: { tags: ["tasks"], revalidate: 10 },
-      })
-        .then((res) => res.json())
-        .then((data) => setTasks(data))
-        .catch((err) => {
-          console.error(err);
-          setIsLoading(false);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, [user]);
+  return (
+    <div className="text-white section__padding ">
+      {user && (
+        <TopBar
+          user={user}
+          setShowAddForm={setShowAddForm}
+          setSearchKey={setSearchKey}
+        />
+      )}
 
-  if (user)
-    return (
-      <div className="text-white section__padding ">
-        {user && !isLoading && (
-          <>
-            <TopBar
-              user={user}
-              setTasks={setTasks}
-              setShowAddForm={setShowAddForm}
-              setSearchKey={setSearchKey}
-            />
-            {showAddForm && (
-              <AddTask
-                userId={JSON.parse(user)._id}
-                setShowAddForm={setShowAddForm}
-              />
-            )}
-            <TaskSummary tasks={tasks} />
-            {searchKey && <FilteredTasks tasks={tasks} searchKey={searchKey} />}
-            {!searchKey && <Kanban tasks={tasks} />}
-          </>
-        )}
-      </div>
-    );
-  else
-    return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <Link href="/login" className="btn">
-          Login to manage your tasks
-        </Link>
-      </div>
-    );
+      {isPending && (
+        <div className="w-max my-10 mx-auto">
+          <ActivitySpinner />
+        </div>
+      )}
+
+      {error && (
+        <p className="mt-10 text-red-500 text-center">
+          Could not get your tasks at the time...
+        </p>
+      )}
+
+      {isSuccess && data && (
+        <>
+          <TaskSummary tasks={data} />
+          {searchKey && <FilteredTasks tasks={data} searchKey={searchKey} />}
+          {!searchKey && <Kanban tasks={data} />}
+        </>
+      )}
+
+      {showAddForm && (
+        <AddTask userId={user._id} setShowAddForm={setShowAddForm} />
+      )}
+    </div>
+  );
 };
 
 export default page;

@@ -4,11 +4,11 @@ import { createContext, useContext, useState, useEffect } from "react";
 export const UserContext = createContext<any>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{} | null>(null);
+  const [user, setUser] = useState<{} | null>({ _id: "", username: "" });
 
   useEffect(() => {
     const preUser = localStorage.getItem("user");
-    setUser(preUser);
+    if (preUser) setUser(JSON.parse(preUser));
   }, []);
 
   const loginUser = (newUser: {}) => {

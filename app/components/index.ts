@@ -5,6 +5,7 @@ import AddTask from "./AddTask";
 import TaskSummary from "./TaskSummary";
 import TaskCard from "./TaskCard";
 import FilteredTasks from "./FilteredTasks";
+import ActivitySpinner from "./ActivitySpinner";
 
 export {
   Navbar,
@@ -14,4 +15,5 @@ export {
   TaskSummary,
   TaskCard,
   FilteredTasks,
+  ActivitySpinner,
 };

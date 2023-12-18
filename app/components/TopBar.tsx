@@ -1,5 +1,5 @@
 import React from "react";
-import { PagePropsI } from "../interfaces";
+import { PagePropsI } from "../lib/interfaces";
 import {
   MdAdd,
   MdArrowUpward,
@@ -35,15 +35,21 @@ const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
           <MdAdd fontSize={30} />
         </div>
 
-        <div className="flex justify-center items-center cursor-pointer px-2 bg-accent-1 border-[1px] border-accent-1 rounded-lg hover:bg-transparent hover:text-liner">
+        <button
+          disabled
+          className="flex justify-center items-center px-2 border-[1px] border-liner text-liner cursor-not-allowed rounded-lg "
+        >
           <MdDateRange />
           <MdArrowUpward className="text-base" />
-        </div>
+        </button>
 
-        <div className="flex justify-center items-center cursor-pointer px-2 bg-accent-1 border-[1px] border-accent-1 rounded-lg hover:bg-transparent hover:text-liner">
+        <button
+          disabled
+          className="flex justify-center items-center px-2 border-[1px] border-liner text-liner cursor-not-allowed rounded-lg "
+        >
           <MdDateRange />
           <MdArrowDownward className="text-base" />
-        </div>
+        </button>
 
         <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
           {isLetter(user?.username[0]) ? user?.username[0].toUpperCase() : "👀"}
