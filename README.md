@@ -10,8 +10,6 @@ npm install
 yarn install
 # or
 pnpm install
-# or
-bun dev
 ```
 
 Lastly, run the development server:
@@ -25,6 +23,16 @@ pnpm dev
 # or
 bun dev
 ```
+
+-- Environment Variable
+
+# For testing in your local machin, create a mongoDB database and create two collections [tasks, users]
+
+# [Find help here](https://www.mongodb.com/basics/create-database)
+
+## set your environment variable 'DB_URI'
+
+# NEXT_PUBLIC_DB_URI="mongodb+srv://<username>:<password>@<clusterName>.zlbnb.mongodb.net/<databaseName>"
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

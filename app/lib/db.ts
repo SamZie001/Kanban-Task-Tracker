@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 import { User } from "../models/Users";
 import { Task } from "../models/Tasks";
 
-const DB_URI = process.env.DB_URI;
+const DB_URI = process.env.NEXT_PUBLIC_DB_URI;
 
 async function connect() {
   try {
