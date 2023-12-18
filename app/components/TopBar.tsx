@@ -8,11 +8,13 @@ import {
 } from "react-icons/md";
 
 const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
-  function isLetter(char: string) {
-    const charCode = char.charCodeAt(0);
-    return (
-      (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)
-    );
+  function isLetter(firstChar: string | undefined) {
+    if (typeof firstChar === "string") {
+      return (
+        (firstChar.charCodeAt(0) >= 65 && firstChar.charCodeAt(0) <= 90) ||
+        (firstChar.charCodeAt(0) >= 97 && firstChar.charCodeAt(0) <= 122)
+      );
+    }
   }
   return (
     <div className="text-white flex flex-col-reverse md:flex-row justify-between items-center gap-5">
@@ -21,15 +23,13 @@ const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
           className="bg-transparent px-4 py-2 outline-none w-[100%]"
           type="text"
           placeholder="Find a Task"
-          // @ts-ignore
-          onChange={(e) => setSearchKey(e.target.value)}
+          onChange={(e) => setSearchKey && setSearchKey(e.target.value)}
         />
       </div>
 
       <div className="flex flex-row-reverse md:flex-row justify-between w-[100%] md:w-max gap-5">
         <div
-          // @ts-ignore
-          onClick={() => setShowAddForm(true)}
+          onClick={() => setShowAddForm && setShowAddForm(true)}
           className="cursor-pointer grid place-content-center w-10 h-10 bg-accent-1 border-[1px] border-accent-1 rounded-lg hover:bg-transparent hover:text-liner"
         >
           <MdAdd fontSize={30} />
@@ -46,10 +46,7 @@ const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
         </div>
 
         <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
-          {typeof user === "string" &&
-            (isLetter(JSON.parse(user).username[0])
-              ? JSON.parse(user).username[0].toUpperCase()
-              : "👀")}
+          {isLetter(user?.username[0]) ? user?.username[0].toUpperCase() : "👀"}
         </div>
       </div>
     </div>
