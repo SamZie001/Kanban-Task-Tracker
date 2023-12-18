@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserContext } from "../context/userContext";
 import {
   TopBar,
@@ -9,22 +9,37 @@ import {
   FilteredTasks,
   ActivitySpinner,
 } from "@/app/components";
-import { useFetchTasks } from "@/app/lib/useTaskData";
+import TaskDataOps from "../lib/TaskDataOps";
+import { TasksI } from "../lib/interfaces";
 
 const page = () => {
+  const { FetchTasks } = TaskDataOps();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const { user } = useUserContext();
-  const { data, isPending, error, isSuccess } = useFetchTasks();
+  const { data, isPending, error, isSuccess } = FetchTasks();
+  const [tasks, setTasks] = useState<TasksI[]>([]);
+
+  useEffect(() => {
+    if (user && data) {
+      setTasks(data.filter((list: TasksI) => list.user == user._id));
+    } else setTasks([]);
+  }, [data, user]);
 
   return (
     <div className="text-white section__padding ">
       {user && (
-        <TopBar
-          user={user}
-          setShowAddForm={setShowAddForm}
-          setSearchKey={setSearchKey}
-        />
+        <>
+          <TopBar
+            user={user}
+            setShowAddForm={setShowAddForm}
+            setSearchKey={setSearchKey}
+          />
+
+          {showAddForm && (
+            <AddTask user={user} setShowAddForm={setShowAddForm} />
+          )}
+        </>
       )}
 
       {isPending && (
@@ -41,14 +56,13 @@ const page = () => {
 
       {isSuccess && data && (
         <>
-          <TaskSummary tasks={data} />
-          {searchKey && <FilteredTasks tasks={data} searchKey={searchKey} />}
-          {!searchKey && <Kanban tasks={data} />}
+          <TaskSummary tasks={tasks} />
+          {searchKey.length > 0 ? (
+            <FilteredTasks tasks={tasks} searchKey={searchKey} />
+          ) : (
+            <Kanban tasks={tasks} />
+          )}
         </>
-      )}
-
-      {showAddForm && (
-        <AddTask userId={user._id} setShowAddForm={setShowAddForm} />
       )}
     </div>
   );

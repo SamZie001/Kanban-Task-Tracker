@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 
 const page = () => {
-  console.clear()
   return (
     <div className="h-[100%] flex flex-col gap-12 justify-center items-center">
       <h1 className="text-accent-1 text-lg text-center drop-shadow-glow">

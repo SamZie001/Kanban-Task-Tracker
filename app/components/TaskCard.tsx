@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import format from "date-fns/format";
 import { CardI } from "../lib/interfaces";
 import {
@@ -9,7 +9,7 @@ import {
   MdDragIndicator,
   MdDelete,
 } from "react-icons/md";
-import { usePatchTask, useDeleteTask } from "@/app/lib/useTaskData";
+import TaskDataOps from "../lib/TaskDataOps";
 
 const Spinner = () => {
   return (
@@ -26,10 +26,11 @@ const TaskCard = ({
   snapshot,
   colorTone,
 }: CardI) => {
+  const { DeleteTask, PatchTask } = TaskDataOps();
   const [editMode, setEditMode] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDesc, setUpdatedDesc] = useState(description);
-  const { mutate: editTask, isPending: isPendingEdit } = usePatchTask(
+  const { mutate: editTask, isPending: isPendingEdit } = PatchTask(
     _id,
     {
       title: updatedTitle,
@@ -41,11 +42,13 @@ const TaskCard = ({
     mutate: deleteTask,
     isPending: isPendingDelete,
     isSuccess: isDeleteSuccess,
-  } = useDeleteTask(_id);
+  } = DeleteTask(_id);
 
   return (
     <div
-      className={`${isDeleteSuccess && 'hidden'} w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
+      className={`${
+        isDeleteSuccess && "hidden"
+      } w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
         snapshot?.isDragging && `border-[2px] border-${colorTone} bg-secondary`
       }`}
       ref={provided?.innerRef}

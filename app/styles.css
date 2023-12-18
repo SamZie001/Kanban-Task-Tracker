@@ -28,7 +28,7 @@
   transition: 0.1s all ease-in;
 }
 .btn {
-  @apply border-2 border-transparent bg-accent-1 text-white hover:bg-transparent hover:border-accent-1 hover:text-liner w-max px-7 py-2 rounded-xl;
+  @apply border-[1px] border-transparent bg-accent-1 text-white hover:bg-transparent hover:border-accent-1 hover:text-liner w-max px-7 py-2 rounded-xl;
   transition: 0.1s all ease-in;
 }
 .btn:disabled {

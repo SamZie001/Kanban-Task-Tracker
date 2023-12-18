@@ -2,25 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { ActivitySpinner } from ".";
-import { useAddTask } from "../lib/useTaskData";
+import TaskDataOps from "../lib/TaskDataOps";
+import { PagePropsI } from "../lib/interfaces";
 
-const AddTask = ({
-  userId,
-  setShowAddForm,
-}: {
-  userId: string;
-  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const AddTask = ({ user, setShowAddForm }: PagePropsI) => {
+  const { AddTask } = TaskDataOps();
   const [formData, setFormData] = useState({
-    user: userId,
+    user: user ? user._id : "",
     title: "",
     description: "",
     dueDate: "",
   });
-  const { mutate, error, isPending, isSuccess } = useAddTask(formData);
+  const { mutate, error, isPending, isSuccess } = AddTask(formData);
 
   useEffect(() => {
-    setShowAddForm(!isSuccess);
+    setShowAddForm && setShowAddForm(!isSuccess);
   }, [isSuccess]);
 
   return (
@@ -31,7 +27,7 @@ const AddTask = ({
         </h1>
         <button
           className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner hover:text-red-400/95"
-          onClick={() => setShowAddForm(false)}
+          onClick={() => setShowAddForm && setShowAddForm(false)}
         >
           <MdClose />
         </button>

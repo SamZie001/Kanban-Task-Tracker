@@ -10,7 +10,7 @@ const Navbar = () => {
   const { user, logoutUser } = useUserContext();
   return (
     <div
-      className={`w-[100%] md:w-[20%] h-20 md:h-[100%] bg-secondary 
+      className={`w-[100%] md:w-[15%] h-20 md:h-[100%] bg-secondary 
         flex flex-row md:flex-col sm:items-center md:items-start
         sm:sticky md:relative z-10`}
     >

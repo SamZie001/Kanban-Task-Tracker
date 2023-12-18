@@ -4,9 +4,7 @@ import { Task, connect } from "@/app/lib/db";
 export async function GET(req: NextRequest) {
   try {
     await connect();
-    const { searchParams } = req.nextUrl;
-    const id = searchParams.get("id");
-    const tasks = await Task.find({ user: id });
+    const tasks = await Task.find({});
     return new Response(JSON.stringify(tasks), { status: 200 });
   } catch (error: any) {
     console.log("error at /tasks api -get route");
@@ -35,8 +33,6 @@ export async function PATCH(req: NextRequest) {
     const { searchParams } = req.nextUrl;
     const _id = searchParams.get("id");
     const { data, type } = await req.json();
-
-    console.log({ data, type });
 
     if (type === "textEdit") {
       await Task.findOneAndUpdate(
