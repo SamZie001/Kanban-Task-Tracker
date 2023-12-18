@@ -8,7 +8,7 @@ const page = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: null, password: null });
-  const { push } = useRouter();
+  const router = useRouter();
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,7 +18,7 @@ const page = () => {
       .then((response) => {
         alert("Register success 👍");
         setIsLoading(false);
-        if (response.statusText === "OK") push("/login");
+        if (response.statusText === "OK") router.push("/login");
       })
       .catch((error) => {
         let { username, password } = error.response.data;

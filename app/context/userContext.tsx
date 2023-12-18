@@ -9,6 +9,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const preUser = localStorage.getItem("user");
     if (preUser) setUser(JSON.parse(preUser));
+    else setUser(null);
   }, []);
 
   const loginUser = (newUser: {}) => {
@@ -18,7 +19,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   const logoutUser = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.clear();
   };
 
   return (

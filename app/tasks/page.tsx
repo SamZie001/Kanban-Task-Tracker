@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "../context/userContext";
+import { useRouter } from "next/navigation";
 import {
   TopBar,
   Kanban,
@@ -17,14 +18,19 @@ const page = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const { user } = useUserContext();
-  const { data, isPending, error, isSuccess } = FetchTasks();
+  const { data, isPending, error, isSuccess, status } = FetchTasks();
   const [tasks, setTasks] = useState<TasksI[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     if (user && data) {
       setTasks(data.filter((list: TasksI) => list.user == user._id));
     } else setTasks([]);
   }, [data, user]);
+
+  useEffect(() => {
+    if (!user && status == "success") router.push("/login");
+  }, [status]);
 
   return (
     <div className="text-white section__padding ">

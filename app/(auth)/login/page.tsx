@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/app/context/userContext";
+import { ActivitySpinner } from "@/app/components";
 import axios from "axios";
 
 const page = () => {
@@ -10,7 +11,7 @@ const page = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: null, password: null });
   const { loginUser } = useUserContext();
-  const { push } = useRouter();
+  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,7 +22,7 @@ const page = () => {
         if (response.statusText === "OK") {
           loginUser(response.data);
           setIsLoading(false);
-          push("/");
+          router.push("/tasks");
         }
       })
       .catch((error) => {
@@ -54,12 +55,15 @@ const page = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <p className="text-red-500">{errors?.password}</p>
-          <button
-            disabled={isLoading}
-            className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white"
-          >
-            {isLoading ? "Hold on..." : "Login"}
-          </button>
+          {!isLoading ? (
+            <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
+              Login
+            </button>
+          ) : (
+            <div className="flex items-center justify-center">
+              <ActivitySpinner />
+            </div>
+          )}
         </form>
       </div>
     </div>
