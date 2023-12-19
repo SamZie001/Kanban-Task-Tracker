@@ -8,7 +8,6 @@ import { BiMenuAltRight } from "react-icons/bi";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { user, logoutUser } = useUserContext();
-  console.log(user);
   return (
     <div
       className={`w-[100%] md:w-[15%] h-20 md:h-[100%] bg-secondary 
