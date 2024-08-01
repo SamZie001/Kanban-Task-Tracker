@@ -3,27 +3,33 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/app/context/userContext";
 import { ActivitySpinner } from "@/app/components";
+import { AuthErrorsI } from "@/app/lib/interfaces";
 import axios from "axios";
 
 const page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ username: null, password: null });
+  const [errors, setErrors] = useState<AuthErrorsI>({
+    username: null,
+    password: null,
+  });
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const { loginUser } = useUserContext();
   const router = useRouter();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setIsLoading(true);
     axios
       .post("/api/login", { username, password })
       .then((response) => {
-        if (response.statusText === "OK") {
+        if (response.status === 200) {
           loginUser(response.data);
-          setIsLoading(false);
           router.push("/tasks");
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         let { username, password } = error.response.data;
@@ -33,38 +39,79 @@ const page = () => {
   }
 
   return (
-    <div className="h-[100%] w-[100%] text-white flex flex-col gap-2 justify-center items-center">
-      <h1 className="text-lg text-accent-2 font-semibold">~ LOGIN ~</h1>
-      <div className="flex flex-col items-center gap-5 border-[1px] border-accent-1 w-[80%] md:w-[60%] p-5 rounded-xl">
-        <form onSubmit={(e) => handleLogin(e)} className="form">
-          <input
-            required
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            name="username"
-            placeholder="Username"
-          />
-          <p className="text-red-500">{errors?.username}</p>
-          <input
-            required
-            type="password"
-            name="passwword"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <p className="text-red-500">{errors?.password}</p>
-          {!isLoading ? (
-            <button className="btn my-0 mx-auto !w-[100%] hover:bg-accent-1 hover:text-white">
-              Login
-            </button>
-          ) : (
-            <div className="flex items-center justify-center">
-              <ActivitySpinner />
+    <div className="w-full h-full flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+      <div className="w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-secondary border-accent-1">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
+            Login
+          </h1>
+          <form
+            className="space-y-4 md:space-y-6"
+            onSubmit={(e) => handleLogin(e)}
+          >
+            <div>
+              <label className="block mb-2 text-sm font-medium text-white">
+                Your Username
+              </label>
+              <input
+                type="text"
+                className="border text-sm rounded-lg w-full p-2.5 bg-gray-700 border-gray-600 text-white outline-none"
+                value={username}
+                disabled={isLoading}
+                onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                name="username"
+                placeholder="Username"
+                autoComplete="off"
+                required
+              />
+              <p className="text-red-500 text-xs py-1">{errors?.username}</p>
             </div>
-          )}
-        </form>
+            <div>
+              <label className="block mb-2 text-sm font-medium text-white">
+                Password
+              </label>
+              <input
+                type={passwordVisible ? "text" : "password"}
+                placeholder="Password"
+                disabled={isLoading}
+                className="border text-sm rounded-lg w-full p-2.5 bg-gray-700 border-gray-600 text-white outline-none"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="off"
+              />
+              <p className="text-red-500 text-xs py-1">{errors?.password}</p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                className="accent-accent-1 cursor-pointer"
+                checked={passwordVisible}
+                onChange={() => setPasswordVisible((prev) => !prev)}
+              />
+              <label className="text-gray-500">show password</label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn !w-full flex items-center justify-center"
+            >
+              {isLoading ? <ActivitySpinner /> : "Login"}
+            </button>
+
+            <p className="text-sm font-light text-gray-400">
+              Don't have an account? &nbsp;&nbsp;
+              <a
+                href="/register"
+                className="font-medium text-accent-1 hover:underline"
+              >
+                Register here
+              </a>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

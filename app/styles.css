@@ -28,18 +28,11 @@
   transition: 0.1s all ease-in;
 }
 .btn {
-  @apply border-[1px] border-transparent bg-accent-1 text-white hover:bg-transparent hover:border-accent-1 hover:text-liner w-max px-7 py-2 rounded-xl;
+  @apply border-[1px] border-transparent bg-accent-1 text-white hover:bg-transparent hover:border-accent-1 w-max px-7 py-2 rounded-xl;
   transition: 0.1s all ease-in;
 }
 .btn:disabled {
   @apply border-2 border-secondary bg-secondary text-liner cursor-not-allowed brightness-[40%];
-}
-.form {
-  @apply flex flex-col gap-4 w-[100%] md:w-[80%];
-}
-.form input,
-.form textarea {
-  @apply w-[100%] rounded-xl bg-transparent border-[1px] border-accent-1 px-4 py-2 outline-none resize-none;
 }
 .form input[type="date"] {
   @apply bg-secondary;

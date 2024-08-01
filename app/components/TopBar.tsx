@@ -1,11 +1,6 @@
 import React from "react";
 import { PagePropsI } from "../lib/interfaces";
-import {
-  MdAdd,
-  MdArrowUpward,
-  MdArrowDownward,
-  MdDateRange,
-} from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 
 const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
   function isLetter(firstChar: string | undefined) {
@@ -35,24 +30,8 @@ const TopBar = ({ user, setShowAddForm, setSearchKey }: PagePropsI) => {
           <MdAdd fontSize={30} />
         </div>
 
-        <button
-          disabled
-          className="flex justify-center items-center px-2 border-[1px] border-liner text-liner cursor-not-allowed rounded-lg "
-        >
-          <MdDateRange />
-          <MdArrowUpward className="text-base" />
-        </button>
-
-        <button
-          disabled
-          className="flex justify-center items-center px-2 border-[1px] border-liner text-liner cursor-not-allowed rounded-lg "
-        >
-          <MdDateRange />
-          <MdArrowDownward className="text-base" />
-        </button>
-
-        <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner animate-pulse">
-          {isLetter(user?.username[0]) ? user?.username[0].toUpperCase() : "👀"}
+        <div className="rounded-full w-10 h-10 grid place-content-center font-bold bg-liner">
+          {isLetter(user?.username[0]) ? user?.username[0].toUpperCase() : "👤"}
         </div>
       </div>
     </div>

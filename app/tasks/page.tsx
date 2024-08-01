@@ -49,7 +49,7 @@ const page = () => {
       )}
 
       {isPending && (
-        <div className="w-max my-10 mx-auto">
+        <div className="w-max my-10 mx-auto flex items-center justify-center">
           <ActivitySpinner />
         </div>
       )}

@@ -1,6 +1,20 @@
-import React from "react";
+import React, { JSX } from "react";
 import { Schema } from "mongoose";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
+
+export interface NavLinkI {
+  title: string;
+  href: string;
+  icon: JSX.Element;
+  condition: boolean;
+  onClick?: () => any;
+}
+
+export interface AuthErrorsI {
+  username: null | string;
+  password: null | string;
+  confirmPassword?: null | string;
+}
 
 export interface UserI {
   username: string;
