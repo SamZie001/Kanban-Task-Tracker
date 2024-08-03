@@ -18,6 +18,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const logoutUser = () => {
     setUser(null);
     localStorage.clear();
+    location.href='/'
   };
 
   return (
