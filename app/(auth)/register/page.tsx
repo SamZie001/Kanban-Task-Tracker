@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { ActivitySpinner } from "@/app/components";
 import { AuthErrorsI } from "@/app/lib/interfaces";
@@ -20,30 +20,30 @@ const page = () => {
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsLoading(true);
 
     if (confirmPassword !== password) {
-      setIsLoading(false);
       return setErrors((prev) => ({
         ...prev,
         confirmPassword: "Passwords do not match",
       }));
     }
 
-    axios
-      .post("/api/register", { username, password })
-      .then((response) => {
-        if (response.statusText === "OK") {
-          setIsLoading(false);
-          alert("Register success 👍");
-          router.push("/login");
-        }
-      })
-      .catch((error) => {
-        let { username, password } = error.response.data;
-        setErrors({ username, password, confirmPassword: null });
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await axios.post("/api/register", {
+        username,
+        password,
       });
+
+      if (response.statusText === "OK") {
+        alert("Register success 👍");
+        router.push("/login");
+      }
+    } catch (error: AxiosError | Error | any) {
+      let { username, password } = error?.response?.data;
+      setErrors({ username, password, confirmPassword: null });
+    }
+    setIsLoading(false);
   }
 
   return (

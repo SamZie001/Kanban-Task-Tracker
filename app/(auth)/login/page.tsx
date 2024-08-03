@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "@/app/context/userContext";
 import { ActivitySpinner } from "@/app/components";
 import { AuthErrorsI } from "@/app/lib/interfaces";
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
 
 const page = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -20,22 +20,20 @@ const page = () => {
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     setIsLoading(true);
-    axios
-      .post("/api/login", { username, password })
-      .then((response) => {
-        if (response.status === 200) {
-          loginUser(response.data);
-          router.push("/tasks");
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        let { username, password } = error.response.data;
-        setErrors({ username, password });
-        setIsLoading(false);
-      });
+
+    try {
+      const response = await axios.post("/api/login", { username, password });
+      if (response.status === 200) {
+        loginUser(response.data);
+        router.push("/tasks");
+      }
+    } catch (error: AxiosError | Error | any) {
+      let { username, password } = error?.response?.data;
+      setErrors({ username, password });
+    }
+
+    setIsLoading(false);
   }
 
   return (
