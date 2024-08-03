@@ -7,9 +7,9 @@ import { AuthErrorsI } from "@/app/lib/interfaces";
 import axios from "axios";
 
 const page = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<AuthErrorsI>({
     username: null,
     password: null,
@@ -89,13 +89,14 @@ const page = () => {
                 className="accent-accent-1 cursor-pointer"
                 checked={passwordVisible}
                 onChange={() => setPasswordVisible((prev) => !prev)}
+                disabled={isLoading}
               />
               <label className="text-gray-500">show password</label>
             </div>
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !username.length || !password.length}
               className="btn !w-full flex items-center justify-center"
             >
               {isLoading ? <ActivitySpinner /> : "Login"}

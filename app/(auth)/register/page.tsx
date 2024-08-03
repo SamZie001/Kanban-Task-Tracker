@@ -6,27 +6,29 @@ import { ActivitySpinner } from "@/app/components";
 import { AuthErrorsI } from "@/app/lib/interfaces";
 
 const page = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errors, setErrors] = useState<AuthErrorsI>({
     username: null,
     password: null,
     confirmPassword: null,
   });
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const router = useRouter();
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
-    if (confirmPassword !== password)
+    if (confirmPassword !== password) {
+      setIsLoading(false);
       return setErrors((prev) => ({
         ...prev,
         confirmPassword: "Passwords do not match",
       }));
+    }
 
     axios
       .post("/api/register", { username, password })
@@ -112,6 +114,7 @@ const page = () => {
                 type="checkbox"
                 className="accent-accent-1 cursor-pointer"
                 checked={passwordVisible}
+                disabled={isLoading}
                 onChange={() => setPasswordVisible((prev) => !prev)}
               />
               <label className="text-gray-500">show password</label>
@@ -119,7 +122,7 @@ const page = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !username.length || !password.length}
               className="btn !w-full flex items-center justify-center"
             >
               {isLoading ? <ActivitySpinner /> : "Register"}
