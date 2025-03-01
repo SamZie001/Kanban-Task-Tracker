@@ -2,129 +2,83 @@
 import React, { useState } from "react";
 import format from "date-fns/format";
 import { CardI } from "../lib/interfaces";
-import {
-  MdEdit,
-  MdCheck,
-  MdTimer,
-  MdDragIndicator,
-  MdDelete,
-} from "react-icons/md";
-import TaskDataOps from "../lib/TaskDataOps";
+import { MdEdit, MdCheck, MdTimer, MdDragIndicator, MdDelete } from "react-icons/md";
+import { useStore } from "@/lib/store";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
-const Spinner = () => {
-  return (
-    <div className="inline-block h-3 w-3 rounded-full border-2 border-r-transparent border-l-transparent animate-spin border-t-accent-1 border-b-accent-2" />
-  );
-};
-
-const TaskCard = ({
-  _id,
-  title,
-  description,
-  dueDate,
-  provided,
-  snapshot,
-  colorTone,
-}: CardI) => {
-  const { DeleteTask, PatchTask } = TaskDataOps();
+const TaskCard = ({ task, provided, snapshot, colorTone }: CardI) => {
+  const { deleteTask, editTask } = useStore();
   const [editMode, setEditMode] = useState(false);
-  const [updatedTitle, setUpdatedTitle] = useState(title);
-  const [updatedDesc, setUpdatedDesc] = useState(description);
-  const { mutate: editTask, isPending: isPendingEdit } = PatchTask(
-    _id,
-    {
-      title: updatedTitle,
-      description: updatedDesc,
-    },
-    "textEdit"
-  );
-  const {
-    mutate: deleteTask,
-    isPending: isPendingDelete,
-    isSuccess: isDeleteSuccess,
-  } = DeleteTask(_id);
+
+  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const updatedTask = {
+      ...task,
+      title: formData.get("title") as string,
+      description: formData.get("description") as string,
+    };
+    editTask(updatedTask);
+    setEditMode(false);
+  };
 
   return (
-    <div
-      className={`${
-        isDeleteSuccess && "hidden"
-      } w-[100%] min-h-[100px] h-auto text-white rounded-lg bg-secondary flex flex-col p-2 select-none ${
+    <form
+      onSubmit={handleEdit}
+      className={`flex h-auto min-h-[100px] flex-col space-y-1 rounded-lg border bg-white p-2 shadow-lg ${
         snapshot?.isDragging && `border-[2px] border-${colorTone} bg-secondary`
       }`}
-      ref={provided?.innerRef}
-      {...provided?.draggableProps}
-      style={provided?.draggableProps.style}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      style={provided.draggableProps.style}
     >
       <div className="flex justify-between">
-        <div
-          {...provided?.dragHandleProps}
-          className="hover:bg-liner rounded-full w-[22px] h-[22px] text-base p-2 grid place-content-center"
-        >
-          <MdDragIndicator />
+        <div {...provided.dragHandleProps}>
+          <MdDragIndicator size={20} className={`text-${colorTone} border-none outline-none`} />
         </div>
-        <div className="flex items-center gap-2">
-          <div
-            onClick={() => {
-              deleteTask();
-            }}
-            className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner hover:text-red-400/95"
-          >
-            {isPendingDelete ? <Spinner /> : <MdDelete />}
-          </div>
+
+        <div className="flex items-center gap-3">
+          <MdDelete
+            size={25}
+            onClick={() => deleteTask(task._id)}
+            className="hover:text-destructive cursor-pointer rounded-md border p-1"
+          />
+
           {!editMode && (
-            <div
+            <MdEdit
+              size={25}
               onClick={() => setEditMode(true)}
-              className="text-sm flex gap-2 items-center border-[1px] border-liner p-1 rounded-md hover:bg-liner"
-            >
-              <MdEdit />
-            </div>
+              className="cursor-pointer rounded-md border p-1 text-orange-950"
+            />
           )}
           {editMode && (
-            <button
-              onClick={() => {
-                editTask();
-                setEditMode(false);
-              }}
-              className="text-sm text-green-500 flex gap-2 items-center border-[1px] border-liner p-1 rounded-md"
-            >
-              {isPendingEdit ? <Spinner /> : <MdCheck />}
+            <button type="submit">
+              <MdCheck size={25} className="cursor-pointer rounded-md border p-1 text-green-950" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="h-[100%]">
-        <input type="text" name="taskId" value={_id} hidden />
-        <input
-          className={`font-semibold bg-transparent outline-none ${
-            editMode && `border-b-[1px] border-dotted border-${colorTone}`
-          }`}
-          type="text"
-          name="title"
-          value={updatedTitle}
-          disabled={!editMode}
-          onChange={(e) => setUpdatedTitle(e.target.value)}
-        />
-        <textarea
-          name="description"
-          value={updatedDesc}
-          disabled={!editMode}
-          onChange={(e) => setUpdatedDesc(e.target.value)}
-          className={`TEXTAREA | pr-1 w-[100%] text-sm mt-1 bg-transparent outline-none ${
-            editMode && `border-b-[1px] border-dotted border-${colorTone}`
-          }`}
-        />
-      </div>
+      <Input
+        name="title"
+        className={`${!editMode && "border-transparent"} p-1 shadow-none`}
+        defaultValue={task.title}
+        disabled={!editMode}
+      />
+      <Textarea
+        name="description"
+        defaultValue={task.description}
+        disabled={!editMode}
+        className={`${!editMode && "border-transparent"} p-1 shadow-none`}
+      />
 
-      <p
-        className={`flex gap-1 items-center text-[0.5rem] self-end pb-1 border-b-[2px] w-max border-${colorTone}`}
-      >
-        <span>
-          <MdTimer />
-        </span>
-        <span>{format(new Date(dueDate), "dd MMM yyyy")}</span>
+      <p className="flex items-center justify-end gap-2 text-xs">
+        <span className="text-muted-foreground">Last updated: </span>
+        <span className="text-xs">{format(new Date(task.updatedAt), "dd MMM yyyy, hh:mm a")}</span>
       </p>
-    </div>
+    </form>
   );
 };
 

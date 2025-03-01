@@ -1,19 +1,9 @@
-import Navbar from "./Navbar";
 import TopBar from "./TopBar";
-import Kanban from "./Kanban";
+import Logo from "./Logo";
 import AddTask from "./AddTask";
-import TaskSummary from "./TaskSummary";
+import SearchTask from "./SearchTask";
 import TaskCard from "./TaskCard";
-import FilteredTasks from "./FilteredTasks";
-import ActivitySpinner from "./ActivitySpinner";
+import Draggable from "./Draggable";
+import Droppable from "./Droppable";
 
-export {
-  Navbar,
-  TopBar,
-  Kanban,
-  AddTask,
-  TaskSummary,
-  TaskCard,
-  FilteredTasks,
-  ActivitySpinner,
-};
+export { Logo, TopBar, SearchTask, AddTask, TaskCard, Draggable, Droppable };

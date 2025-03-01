@@ -1,31 +1,35 @@
-import { TasksI } from "./interfaces";
+import { Task } from "./interfaces";
 
-export const createColumns = (tasks: TasksI[] | [] | undefined) => {
+type Column = Record<
+  Task["status"],
+  {
+    name: string;
+    items: Task[];
+    colorTone: string;
+  }
+>;
+
+export const createColumns = (tasks: Task[]): Column => {
   return {
-    open: {
-      name: "Opened Tasks",
-      items: tasks?.filter((task) => task.status === "open"),
-      colorTone: "accent-1",
-    },
-    pending: {
-      name: "Pending Tasks",
-      items: tasks?.filter((task) => task.status === "pending"),
-      colorTone: "accent-2",
+    new: {
+      name: "New",
+      items: tasks.filter((task) => task.status === "new"),
+      colorTone: "primary",
     },
     inProgress: {
-      name: "Tasks In Progress",
-      items: tasks?.filter((task) => task.status === "inProgress"),
+      name: "In Progress",
+      items: tasks.filter((task) => task.status === "inProgress"),
       colorTone: "orange-500",
     },
     complete: {
-      name: "Completed Tasks",
-      items: tasks?.filter((task) => task.status === "complete"),
+      name: "Completed",
+      items: tasks.filter((task) => task.status === "complete"),
       colorTone: "green-500",
     },
   };
 };
 
-export const HandleDragEnd = (result: any, columns: any, setColumns: any) => {
+export const HandleDragEnd = (result: any, columns: any) => {
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -38,29 +42,29 @@ export const HandleDragEnd = (result: any, columns: any, setColumns: any) => {
 
     const [removed] = sourceItems.splice(source.index, 1);
     destItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...sourceColumn,
-        items: sourceItems,
-      },
-      [destination.droppableId]: {
-        ...destColumn,
-        items: destItems,
-      },
-    });
+    // setColumns({
+    //   ...columns,
+    //   [source.droppableId]: {
+    //     ...sourceColumn,
+    //     items: sourceItems,
+    //   },
+    //   [destination.droppableId]: {
+    //     ...destColumn,
+    //     items: destItems,
+    //   },
+    // });
   } else {
     const column = columns[source.droppableId];
     const copiedItems = [...column.items];
 
     const [removed] = copiedItems.splice(source.index, 1);
     copiedItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...column,
-        items: copiedItems,
-      },
-    });
+    // setColumns({
+    //   ...columns,
+    //   [source.droppableId]: {
+    //     ...column,
+    //     items: copiedItems,
+    //   },
+    // });
   }
 };
