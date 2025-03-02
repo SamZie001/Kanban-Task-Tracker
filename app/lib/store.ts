@@ -12,7 +12,7 @@ type State = {
 type Actions = {
   addTask: (task: Pick<Task, "title" | "description">) => void;
   editTask: (task: Task) => void;
-  moveTask: (id: Task["_id"], status: Task["status"]) => void;
+  moveTask: (id: Task["_id"], destinationColumnId: Task["status"], destinationIndex: number) => void;
   deleteTask: (id: Task["_id"]) => void;
   setSearchKey: (s: string) => void;
 };
@@ -28,10 +28,20 @@ export const useStore = create<State & Actions>()(
         set((state) => ({
           tasks: state.tasks.map((t) => (t._id === task._id ? { ...task, _id: t._id, updatedAt: new Date() } : t)),
         })),
-      moveTask: (id, status) => {
-        set((state) => ({
-          tasks: state.tasks.map((task) => (task._id === id ? { ...task, status, updatedAt: new Date() } : task)),
-        }));
+      moveTask: (id, destinationColumnId, destinationIndex) => {
+        set((state) => {
+          const tasks = [...state.tasks];
+          const taskIndex = tasks.findIndex((task) => task._id === id);
+          const [movedTask] = tasks.splice(taskIndex, 1); // Remove the task from its current position
+
+          // Update the task's status to the new column ID
+          const updatedTask: Task = { ...movedTask, status: destinationColumnId, updatedAt: new Date() };
+
+          // Insert the updated task into the new position
+          tasks.splice(destinationIndex, 0, updatedTask);
+
+          return { tasks }; // Return the updated tasks array
+        });
       },
       deleteTask: (id) =>
         set((state) => ({

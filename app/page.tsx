@@ -1,10 +1,9 @@
 "use client";
 import React from "react";
-import { DndContext } from "@dnd-kit/core";
-import { TaskCard, Draggable, Droppable } from "./components";
+import { TaskCard } from "./components";
 import { useStore } from "@/lib/store";
-import { createColumns, HandleDragEnd } from "@/lib/kanbanConfig";
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { createColumns } from "@/lib/kanbanConfig";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Task } from "./lib/interfaces";
 
 const page = () => {
@@ -12,32 +11,27 @@ const page = () => {
   const columns = createColumns(tasks);
 
   return (
-    <div className="p-5">
-      <p className="text-center text-base">Change your task status by dragging it to another container</p>
-      <DndContext>
-        <div className="my-5 grid gap-2 sm:grid-cols-3">
-          <Draggable />
-          <Droppable />
-          {/* <DragDropContext
-          onDragEnd={(item) => {
-            HandleDragEnd(item, columns);
+    <DragDropContext
+      onDragEnd={(item) => {
+        if (item.destination)
+          moveTask(item.draggableId, item.destination.droppableId as Task["status"], item.destination.index);
+      }}
+    >
+      <div className="space-y-5 p-5">
+        <p className="text-center text-base">Change your task status by dragging it to another container</p>
 
-            // update item in store
-            console.log(item.draggableId, item.destination?.droppableId);
-            // moveTask(item.draggableId, item.destination?.droppableId as Task["status"]);
-          }}
-        >
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {Object.entries(columns)?.map(([id, column]) => (
-            <div key={id} className={`overflow-hidden border-l border-r`}>
+            <div key={id} className="space-y-2">
+              <h1 className={`text-${column.colorTone} text-center font-semibold`}>{column.name}</h1>
+
               <Droppable droppableId={id}>
                 {(provided) => (
                   <div
-                    key={id}
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="flex flex-col gap-2 p-1"
+                    className="space-y-2 rounded-lg border p-2 shadow-lg"
                   >
-                    <h1 className={`text-${column.colorTone} mb-2 py-2 text-center font-semibold`}>{column.name}</h1>
                     {column.items
                       ?.filter(
                         (item) =>
@@ -63,10 +57,9 @@ const page = () => {
               </Droppable>
             </div>
           ))}
-        </DragDropContext> */}
         </div>
-      </DndContext>
-    </div>
+      </div>
+    </DragDropContext>
   );
 };
 

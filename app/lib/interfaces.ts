@@ -1,4 +1,3 @@
-import React from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 
 export interface LogoI {
@@ -15,7 +14,7 @@ export type Task = {
 
 export interface CardI extends Partial<Task> {
   task: Task;
-  provided: DraggableProvided;
-  snapshot: DraggableStateSnapshot;
+  provided?: DraggableProvided;
+  snapshot?: DraggableStateSnapshot;
   colorTone: string;
 }

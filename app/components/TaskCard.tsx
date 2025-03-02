@@ -27,15 +27,15 @@ const TaskCard = ({ task, provided, snapshot, colorTone }: CardI) => {
   return (
     <form
       onSubmit={handleEdit}
-      className={`flex h-auto min-h-[100px] flex-col space-y-1 rounded-lg border bg-white p-2 shadow-lg ${
+      className={`flex h-auto min-h-[100px] flex-col space-y-1 rounded-lg border bg-white p-2 ${
         snapshot?.isDragging && `border-[2px] border-${colorTone} bg-secondary`
       }`}
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      style={provided.draggableProps.style}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      style={provided?.draggableProps.style}
     >
       <div className="flex justify-between">
-        <div {...provided.dragHandleProps}>
+        <div {...provided?.dragHandleProps}>
           <MdDragIndicator size={20} className={`text-${colorTone} border-none outline-none`} />
         </div>
 
@@ -43,7 +43,7 @@ const TaskCard = ({ task, provided, snapshot, colorTone }: CardI) => {
           <MdDelete
             size={25}
             onClick={() => deleteTask(task._id)}
-            className="hover:text-destructive cursor-pointer rounded-md border p-1"
+            className="cursor-pointer rounded-md border p-1 hover:text-destructive"
           />
 
           {!editMode && (

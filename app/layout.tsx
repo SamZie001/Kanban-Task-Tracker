@@ -10,15 +10,10 @@ const quicksand = Quicksand({
 
 export const metadata: Metadata = {
   title: "Maiboard",
-  description:
-    "Maiboard is a Kanban task board that helps you organize and manage your tasks efficiently.",
+  description: "Maiboard is a Kanban task board that helps you organize and manage your tasks efficiently.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={quicksand.className}>
