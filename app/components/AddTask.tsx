@@ -3,6 +3,7 @@ import React from "react";
 import { useStore } from "@/lib/store";
 import { Task } from "@/lib/interfaces";
 
+import { IoMdAdd } from "react-icons/io";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
@@ -25,7 +26,10 @@ const AddTask = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Add new task</Button>
+        <Button>
+          <span className="hidden sm:block">Add new task</span>
+          <IoMdAdd className="sm:hidden" size={15} />
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="border-transparent bg-white" aria-describedby="add task form">
@@ -43,7 +47,7 @@ const AddTask = () => {
             <Textarea name="description" placeholder="Description" required />
           </div>
 
-          <Button variant="default" type="submit" className="w-full">
+          <Button type="submit" className="w-full">
             Add Task
           </Button>
         </form>

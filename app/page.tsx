@@ -18,7 +18,7 @@ const page = () => {
       }}
     >
       <div className="space-y-5 p-5">
-        <p className="text-center text-base">Change your task status by dragging it to another container</p>
+        <p className="text-center text-sm sm:text-base">Drag and drop tasks to update their status</p>
 
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {Object.entries(columns)?.map(([id, column]) => (

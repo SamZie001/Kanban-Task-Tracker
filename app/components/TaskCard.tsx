@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import format from "date-fns/format";
 import { CardI } from "../lib/interfaces";
-import { MdEdit, MdCheck, MdTimer, MdDragIndicator, MdDelete } from "react-icons/md";
+import { MdEdit, MdCheck, MdDragIndicator, MdDelete } from "react-icons/md";
 import { useStore } from "@/lib/store";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -63,20 +63,20 @@ const TaskCard = ({ task, provided, snapshot, colorTone }: CardI) => {
 
       <Input
         name="title"
-        className={`${!editMode && "border-transparent"} p-1 shadow-none`}
+        className={`${!editMode && "border-transparent focus-visible:ring-0"} p-1 text-sm shadow-none`}
         defaultValue={task.title}
-        disabled={!editMode}
+        readOnly={!editMode}
       />
       <Textarea
         name="description"
+        className={`${!editMode && "border-transparent focus-visible:ring-0"} p-1 text-sm shadow-none`}
         defaultValue={task.description}
-        disabled={!editMode}
-        className={`${!editMode && "border-transparent"} p-1 shadow-none`}
+        readOnly={!editMode}
       />
 
       <p className="flex items-center justify-end gap-2 text-xs">
         <span className="text-muted-foreground">Last updated: </span>
-        <span className="text-xs">{format(new Date(task.updatedAt), "dd MMM yyyy, hh:mm a")}</span>
+        <span className="text-[0.6rem] font-semibold">{format(new Date(task.updatedAt), "dd MMM yyyy, hh:mm a")}</span>
       </p>
     </form>
   );

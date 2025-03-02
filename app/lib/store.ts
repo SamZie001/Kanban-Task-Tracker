@@ -20,7 +20,29 @@ type Actions = {
 export const useStore = create<State & Actions>()(
   persist(
     (set) => ({
-      tasks: [],
+      tasks: [
+        {
+          _id: "1",
+          title: "Welcome to Maiboard",
+          description: "Save tasks here, pin to your bookmarks on your browser for easy access while working online",
+          status: "new",
+          updatedAt: new Date(),
+        },
+        {
+          _id: "2",
+          title: "I'M ON IT!!!",
+          description: "Currently working on a task? Drag it in here to keep tabs on your ongoing tasks",
+          status: "inProgress",
+          updatedAt: new Date(),
+        },
+        {
+          _id: "3",
+          title: "Completed a task?",
+          description: "Completed a task? Simply drag it to this column so you can easily track your progress",
+          status: "complete",
+          updatedAt: new Date(),
+        },
+      ],
       searchKey: "",
       addTask: (task) =>
         set((state) => ({ tasks: [...state.tasks, { ...task, _id: uuid(), status: "new", updatedAt: new Date() }] })),
